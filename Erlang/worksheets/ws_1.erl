@@ -99,7 +99,7 @@ fib3(N, Acc1,Acc2) -> fib3(N-1,Acc2, Acc1+Acc2).
 tuple_to_list(Tuple) when is_tuple(Tuple) ->
   tuple_to_list2(Tuple, tuple_size(Tuple), []).
  
-tuple_to_list2(T, 0, Acc) -> Acc;
+tuple_to_list2(_, 0, Acc) -> Acc;
 tuple_to_list2(T , N, Acc)-> tuple_to_list2( T, N-1, [element(N,T)|Acc]).
 
 %% -----------------------------------------------------------------------------
@@ -114,9 +114,12 @@ tuple_to_list2(T , N, Acc)-> tuple_to_list2( T, N-1, [element(N,T)|Acc]).
 %% for(0, 0, ..) would still yield a list with a value 0 (i.e. [0]), *not* the
 %% empty list.
 %% -----------------------------------------------------------------------------
-for(_, _, _) ->
-  % TODO: Add implementation.
-  ok.
+for(Start, Max, F) when is_integer(Start), is_integer(Max), Max>=Start ->
+  for2(Start, Max, F, []).
+
+for2(Max, Max, F,Acc) ->  reverse([F(Max)|Acc]);
+for2(I, Max, F,Acc) -> for2( I+1, Max,F, [F(I)|Acc]).
+ 
 
 %% -----------------------------------------------------------------------------
 %% Reduces a list of elements using the specified combining function F, starting
@@ -128,9 +131,9 @@ for(_, _, _) ->
 %%   * List::list() is the list to reduce using the combining function F.
 %% Returns: A single value that reflects the reduction of List.
 %% -----------------------------------------------------------------------------
-reduce(_, Acc, []) ->
-  % TODO: Add implementation.
-  ok.
+reduce(_, Acc, []) ->Acc;
+reduce(F, Acc, [H|T])-> reduce(F, F(H,Acc), T).
+  
 
 %% -----------------------------------------------------------------------------
 %% Maps a list of elements into another list of elements having equal length.
@@ -140,9 +143,10 @@ reduce(_, Acc, []) ->
 %%   * List::list() is the list to map.
 %% Returns: A new list with F applied on each element of the old List.
 %% -----------------------------------------------------------------------------
-map(F, List) ->
-  % TODO: Add implementation.
-  ok.
+map(F, List) -> map2(F, List, []).
+map2(_, [],Acc) -> reverse(Acc);
+map2(F, [H|T], Acc) -> map2(F, T, [F(H)|Acc]).
+ 
 
 %% -----------------------------------------------------------------------------
 %% Filters a list of elements according to the specifed predicate F.
@@ -154,6 +158,8 @@ map(F, List) ->
 %% Returns: A new list filtered according to F, possibly containing fewer
 %%          elements than the original List.
 %% -----------------------------------------------------------------------------
-filter(F, List) ->
-  % TODO: Add implementation.
-  ok.
+filter(F, List) -> filter2(F, List, []).
+
+filter2(_,[], Acc) -> reverse(Acc);
+filter2(F, [H|T], Acc)->case F(H) of true -> filter2(F, T, [H|Acc]);
+ false -> filter2(F, T, Acc) end.

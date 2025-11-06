@@ -65,9 +65,10 @@ remove2(Key, N, [H|T]) -> [H|remove2(Key, N, T)].
 store(Key, N, TupleList, New) when is_integer(N), N > 0, is_tuple(New) ->
   store2(Key, N, TupleList, New, false).
 
-store2(_, _, [], New) ->[New];
-store2(Key, N, [H|T], New) when element(N,H) == Key -> [New|store2(Key,N,T,New)];
-store2(Key, N, [H|T], New) -> [H|store2(Key, N,T,New)].
+store2(_, _, [], New, false) ->[New];
+store2(_, _, [], _, true) ->[];
+store2(Key, N, [H|T], New, _) when element(N,H) == Key -> [New|store2(Key,N,T,New, true)];
+store2(Key, N, [H|T], New, Bool) -> [H|store2(Key, N,T,New, Bool)].
 
   % TODO: Add implementation.
 
@@ -81,6 +82,6 @@ store2(Key, N, [H|T], New) -> [H|store2(Key, N,T,New)].
 reverse(List) ->
   reverse2(List, []).
 
-reverse2(_, _) ->
-  % TODO: Add implementation.
-  ok.
+reverse2([], Acc) ->Acc;
+reverse2([H|T], Acc) ->reverse2(T, [H|Acc]).
+
