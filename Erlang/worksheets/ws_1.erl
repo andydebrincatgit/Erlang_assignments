@@ -16,9 +16,10 @@
 reverse(List) ->
   reverse2(List, []).
 
-reverse2(_, _) ->
-  % TODO: Add implementation.
-  ok.
+reverse2([], Acc)-> Acc;
+reverse2([H|T], Acc) -> reverse2(T, [H|Acc]).
+
+
 
 %% -----------------------------------------------------------------------------
 %% Computes fibonacci numbers using direct recursion.
@@ -29,9 +30,12 @@ reverse2(_, _) ->
 %% Note that we need both clauses for fib(0) and fib(1) because in the recursive
 %% step we are invoking fib/1 with both N - 1 and N - 2.
 %% -----------------------------------------------------------------------------
-fib1(_) ->
+fib1(0) -> 1;
+fib1(1)->1;
+fib1(N) when is_integer(N), N > 0-> fib1(N-1) + fib1(N-2).
+
   % TODO: Add implementation.
-  ok.
+
 
 %% -----------------------------------------------------------------------------
 %% Computes fibonacci numbers using tail recursion.
@@ -75,9 +79,16 @@ fib1(_) ->
 fib2(N) when is_integer(N), N >= 0 ->
   fib3(N, 0, 1).
 
-fib3(_, _, _) ->
+fib3(0, 0, 1) -> 1;
+
+fib3(1, 0, 1) -> 1;
+
+fib3(1, Acc1, Acc2) -> Acc1 +Acc2 ;
+
+fib3(N, Acc1,Acc2) -> fib3(N-1,Acc2, Acc1+Acc2).
+
   % TODO: Add implementation.
-  ok.
+  
 
 %% -----------------------------------------------------------------------------
 %% Converts a tuple to list.
@@ -87,10 +98,9 @@ fib3(_, _, _) ->
 %% -----------------------------------------------------------------------------
 tuple_to_list(Tuple) when is_tuple(Tuple) ->
   tuple_to_list2(Tuple, tuple_size(Tuple), []).
-
-tuple_to_list2(_, _, _) ->
-  % TODO: Add implementation.
-  ok.
+ 
+tuple_to_list2(T, 0, Acc) -> Acc;
+tuple_to_list2(T , N, Acc)-> tuple_to_list2( T, N-1, [element(N,T)|Acc]).
 
 %% -----------------------------------------------------------------------------
 %% Loops and applies the specified function from I to Max.

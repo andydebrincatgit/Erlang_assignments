@@ -21,9 +21,10 @@
 fetch(Key, N, TupleList) when is_integer(N), N > 0 ->
   fetch2(Key, N, TupleList).
 
-fetch2(_, _, _) ->
-  % TODO: Add implementation.
-  ok.
+fetch2(_, _, []) -> false;
+fetch2(Key, N, [H|_]) when  element(N, H)  == Key -> H;
+fetch2(Key, N, [_|T]) -> fetch2(Key, N, T).
+ 
 
 %% -----------------------------------------------------------------------------
 %% Removes all tuples whose Nth element is equal to the value of key from the
@@ -40,9 +41,13 @@ fetch2(_, _, _) ->
 remove(Key, N, TupleList) when is_integer(N), N > 0 ->
   remove2(Key, N, TupleList).
 
-remove2(_, _, _) ->
+remove2(_, _, []) -> [];
+remove2(Key, N, [H|T]) when element(N,H) == Key -> remove2(Key,N,T);
+remove2(Key, N, [H|T]) -> [H|remove2(Key, N, T)].
+
+
+
   % TODO: Add implementation.
-  ok.
 
 %% -----------------------------------------------------------------------------
 %% Replaces all the tuples whose Nth element is equal to the value of Key with
@@ -60,9 +65,12 @@ remove2(_, _, _) ->
 store(Key, N, TupleList, New) when is_integer(N), N > 0, is_tuple(New) ->
   store2(Key, N, TupleList, New, false).
 
-store2(_, _, _, _, _) ->
+store2(_, _, [], New) ->[New];
+store2(Key, N, [H|T], New) when element(N,H) == Key -> [New|store2(Key,N,T,New)];
+store2(Key, N, [H|T], New) -> [H|store2(Key, N,T,New)].
+
   % TODO: Add implementation.
-  ok.
+
 
 %% -----------------------------------------------------------------------------
 %% Reverses the specified list.
