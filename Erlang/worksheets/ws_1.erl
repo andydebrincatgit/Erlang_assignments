@@ -143,9 +143,8 @@ reduce(F, Acc, [H|T])-> reduce(F, F(H,Acc), T).
 %%   * List::list() is the list to map.
 %% Returns: A new list with F applied on each element of the old List.
 %% -----------------------------------------------------------------------------
-map(F, List) -> map2(F, List, []).
-map2(_, [],Acc) -> reverse(Acc);
-map2(F, [H|T], Acc) -> map2(F, T, [F(H)|Acc]).
+
+map(F, List) ->reverse(reduce((fun(H,T) -> [F(H)|T]), [],List)).
  
 
 %% -----------------------------------------------------------------------------
@@ -158,8 +157,4 @@ map2(F, [H|T], Acc) -> map2(F, T, [F(H)|Acc]).
 %% Returns: A new list filtered according to F, possibly containing fewer
 %%          elements than the original List.
 %% -----------------------------------------------------------------------------
-filter(F, List) -> filter2(F, List, []).
-
-filter2(_,[], Acc) -> reverse(Acc);
-filter2(F, [H|T], Acc)->case F(H) of true -> filter2(F, T, [H|Acc]);
- false -> filter2(F, T, Acc) end.
+filter(F, List) -> reverse(reduce((fun(H,T) ->case F(H) of true -> [H|T], false -> T end.), [],List)).

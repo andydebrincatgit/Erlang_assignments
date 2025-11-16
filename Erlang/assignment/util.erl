@@ -46,9 +46,6 @@ remove2(Key, N, [H|T]) when element(N,H) == Key -> remove2(Key,N,T);
 remove2(Key, N, [H|T]) -> [H|remove2(Key, N, T)].
 
 
-
-  % TODO: Add implementation.
-
 %% -----------------------------------------------------------------------------
 %% Replaces all the tuples whose Nth element is equal to the value of Key with
 %% the new tuple New from the specified TupleList.
@@ -69,8 +66,6 @@ store2(_, _, [], New, false) ->[New];
 store2(_, _, [], _, true) ->[];
 store2(Key, N, [H|T], New, _) when element(N,H) == Key -> [New|store2(Key,N,T,New, true)];
 store2(Key, N, [H|T], New, Bool) -> [H|store2(Key, N,T,New, Bool)].
-
-  % TODO: Add implementation.
 
 
 %% -----------------------------------------------------------------------------
